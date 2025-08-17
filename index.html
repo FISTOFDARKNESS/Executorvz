@@ -589,11 +589,23 @@ function UILibrary:CreateWindow(config)
                     end
                 end)
                 
-                sliderBar.MouseButton1Down:Connect(function(x, y)
-                    local relativeX = x - sliderBar.AbsolutePosition.X
-                    local ratio = math.clamp(relativeX / sliderBar.AbsoluteSize.X, 0, 1)
-                    updateSlider(min + (max - min) * ratio)
-                end)
+               sliderBar.MouseButton1Down:Connect(function()
+    local connection
+    connection = UserInputService.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement then
+            local mousePosition = input.Position
+            local relativeX = mousePosition.X - sliderBar.AbsolutePosition.X
+            local ratio = math.clamp(relativeX / sliderBar.AbsoluteSize.X, 0, 1)
+            updateSlider(min + (max - min) * ratio)
+        end
+    end)
+    
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            connection:Disconnect()
+        end
+    end)
+end)
                 
                 UserInputService.InputChanged:Connect(function(input)
                     if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
