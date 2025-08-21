@@ -75,7 +75,7 @@ const executorsData = [
         name: "Hydrogen",
         platform: "pc",
         website: "https://hydrogen.lat/",
-        discord: "https://discord.com/invite/gethydrogen",
+        discord: "https://discord.com/invite/hydrogen",
         price: "free",
         features: ["Updated", "Scripts Fully Supported", "Key System"]
     },
@@ -135,4 +135,5 @@ const executorsData = [
         price: "free",
         features: ["Updated", "Scripts Fully Supported", "Key System"]
     }
+
 ];
