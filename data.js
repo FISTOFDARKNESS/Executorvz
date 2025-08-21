@@ -7,6 +7,14 @@ const executorsData = [
         price: "free",
         features: ["Updated", "Scripts Fully Supported", "Key System"]
     },
+        {
+        name: "Solara",
+        platform: "pc",
+        website: "https://getsolara.dev/",
+        discord: "https://getsolara.dev/discord/",
+        price: "free",
+        features: ["Scripts are not fully supported", "Keyless"]
+    },
     {
         name: "Cryptic",
         platform: "android",
@@ -137,3 +145,4 @@ const executorsData = [
     }
 
 ];
+
