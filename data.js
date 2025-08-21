@@ -13,7 +13,7 @@ const executorsData = [
         website: "https://getsolara.dev/",
         discord: "https://getsolara.dev/discord/",
         price: "free",
-        features: ["Scripts are not fully supported", "Keyless"]
+        features: [, "Updated", "Scripts are not fully supported", "Keyless"]
     },
     {
         name: "Cryptic",
@@ -145,4 +145,5 @@ const executorsData = [
     }
 
 ];
+
 
