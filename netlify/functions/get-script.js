@@ -1,81 +1,66 @@
 const crypto = require('crypto');
 
-// MESMA SECRET KEY do generate-token
-const SECRET_KEY = "zeta-realm-secret-key-" + Date.now().toString(36);
-const SCRIPT_CONTENT = `print("hi2")`;
+const SECRET_KEY = "zeta-realm-" + Date.now().toString(36);
+const SCRIPT_CONTENT = `print("Zeta Realm Loaded! 🔥")
+print("Time: " .. os.date())
+
+-- Your exploit code here
+local Player = game:GetService("Players").LocalPlayer
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "Zeta Realm",
+    Text = "Script executed successfully!",
+    Duration = 5
+})
+
+print("Player: " .. Player.Name)
+return true`;
 
 exports.handler = async (event) => {
     const headers = {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "X-Token, User-Agent, Content-Type",
-        "Content-Type": "text/plain",
-        "X-Zeta-Realm": "Protected-Script-Delivery"
+        "Access-Control-Allow-Headers": "*",
+        "Content-Type": "text/plain"
     };
 
-    // CORS preflight
     if (event.httpMethod === "OPTIONS") {
         return { statusCode: 200, headers, body: "" };
     }
 
-    try {
-        // Pega o token da query string
-        const token = event.queryStringParameters?.token;
-        
-        if (!token) {
-            return {
-                statusCode: 403,
-                headers: { ...headers, "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    error: "Token required",
-                    message: "Access forbidden. No token provided.",
-                    hint: "Use /api/generate-token first"
-                })
-            };
-        }
+    const token = event.queryStringParameters?.token;
+    
+    if (!token) {
+        return {
+            statusCode: 403,
+            headers,
+            body: "ERROR: Token required. Visit /.netlify/functions/generate-token first."
+        };
+    }
 
-        // Verifica headers (opcional mas recomendado)
-        const clientToken = event.headers['x-token'];
-        const userAgent = event.headers['user-agent'] || '';
-        
-        // Divide o token
+    try {
         const parts = token.split('.');
         if (parts.length !== 2) {
-            return {
-                statusCode: 403,
-                headers,
-                body: "Access Denied: Invalid token format ⚠️"
-            };
+            return { statusCode: 403, headers, body: "ERROR: Invalid token" };
         }
 
         const [timestamp, signature] = parts;
-        
-        // Verifica expiração (15 segundos)
         const now = Date.now();
         const tokenTime = parseInt(timestamp);
         
-        if (Math.abs(now - tokenTime) > 15000) {
-            return {
-                statusCode: 403,
-                headers,
-                body: "Access Denied: Token expired ⏰"
-            };
+        // 30 segundos de validade
+        if (Math.abs(now - tokenTime) > 30000) {
+            return { statusCode: 403, headers, body: "ERROR: Token expired" };
         }
 
-        // Verifica assinatura
         const expectedSignature = crypto
             .createHmac("sha256", SECRET_KEY)
-            .update(timestamp + (userAgent.includes('ZoClient') ? 'ZoClient' : userAgent))
+            .update(timestamp)
             .digest("hex");
         
         if (signature !== expectedSignature) {
-            return {
-                statusCode: 403,
-                headers,
-                body: "Access Denied: Invalid signature 🔐"
-            };
+            return { statusCode: 403, headers, body: "ERROR: Invalid signature" };
         }
 
-        // TOKEN VÁLIDO - Entrega o script
+        // TOKEN VÁLIDO
         return {
             statusCode: 200,
             headers,
@@ -85,11 +70,8 @@ exports.handler = async (event) => {
     } catch (error) {
         return {
             statusCode: 500,
-            headers: { ...headers, "Content-Type": "application/json" },
-            body: JSON.stringify({
-                error: "Internal Server Error",
-                message: error.message
-            })
+            headers,
+            body: "ERROR: " + error.message
         };
     }
 };
