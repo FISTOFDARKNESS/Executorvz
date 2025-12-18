@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const SECRET_KEY = "zeta-realm-master-secret-key-2024";
-const SCRIPT_CONTENT = `print("hi")`;
+const SCRIPT_CONTENT = `https://pastefy.app/RBcneQxu/raw`;
 
 exports.handler = async (event) => {
     const headers = {
