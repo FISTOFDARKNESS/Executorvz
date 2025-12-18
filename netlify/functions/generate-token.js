@@ -29,7 +29,7 @@ exports.handler = async (event) => {
         const token = `${timestamp}.${signature}`;
         
         // Gera URL do script com token
-        const scriptUrl = `https://${event.headers.host || 'zeta-realm.netlify.app'}/.netlify/functions/get-script?token=${token}`;
+        const scriptUrl = `https://${event.headers.host || 'api-excaliburhub.netlify.app'}/.netlify/functions/get-script?token=${token}`;
         
         // Response baseada no formato solicitado
         const format = event.queryStringParameters?.format || 'json';
