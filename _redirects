@@ -1,1 +1,1 @@
-/file/*  /.netlify/functions/file  200
+/file/*  /.netlify/functions/file/:splat  200
