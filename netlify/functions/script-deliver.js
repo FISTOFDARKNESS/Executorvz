@@ -15,7 +15,7 @@ exports.handler = async (event, context) => {
         console.log('✅ ROBLOX DETECTED - DELIVERING SCRIPT');
         
         // TEU SCRIPT LUA AQUI, Alpha 🔥
-        const luaScript = `prin("hello, word") `.trim();
+        const luaScript = `print("hello, word") `.trim();
         
         return {
             statusCode: 200,
