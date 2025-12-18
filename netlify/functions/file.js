@@ -1,8 +1,9 @@
-const { TOKENS } = require("./token");
+const crypto = require("crypto");
+const SECRET = "FUCKYOUNIGGA";
 
 const FILES = {
   "5f38a9b95530af2a5429fc6e693a328a8765534ce": `
-print("Script carregado com token")
+print("Script carregado com token válido")
   `
 };
 
@@ -15,11 +16,26 @@ exports.handler = async (event) => {
     return { statusCode: 404 };
   }
 
-  if (!token || !TOKENS.has(token)) {
-    return { statusCode: 403, body: "Invalid token" };
+  if (!token || !token.includes(".")) {
+    return { statusCode: 403 };
   }
 
-  TOKENS.delete(token);
+  const [dataB64, sig] = token.split(".");
+  const data = Buffer.from(dataB64, "base64").toString();
+
+  const expectedSig = crypto
+    .createHmac("sha256", SECRET)
+    .update(data)
+    .digest("hex");
+
+  if (sig !== expectedSig) {
+    return { statusCode: 403 };
+  }
+
+  const payload = JSON.parse(data);
+  if (Date.now() > payload.exp) {
+    return { statusCode: 403 };
+  }
 
   if (!FILES[hash]) {
     return { statusCode: 404 };
