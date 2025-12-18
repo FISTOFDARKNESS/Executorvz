@@ -34,7 +34,7 @@ exports.handler = async (event) => {
                 "X-Token": token,
                 "User-Agent": "ZoClient/1.0"
             },
-            expires_in: 30000, // 30 segundos
+            expires_in: 2000, // 30 segundos
             loadstring: `loadstring(game:HttpGet("${scriptUrl}", {["X-Token"] = "${token}", ["User-Agent"] = "ZoClient/1.0"}))()`
         };
 
