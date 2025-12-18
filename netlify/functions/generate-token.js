@@ -24,7 +24,7 @@ exports.handler = async (event) => {
         const token = `${timestamp}.${signature}`;
         
         // URL ABSOLUTA do seu site
-        const siteUrl = `https://${event.headers.host || 'zeta-realm.netlify.app'}`;
+        const siteUrl = `https://${event.headers.host || 'api-excaliburhub.netlify.app'}`;
         const scriptUrl = `${siteUrl}/.netlify/functions/get-script?token=${token}`;
         
         const response = {
