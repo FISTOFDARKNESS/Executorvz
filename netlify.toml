@@ -1,19 +1,2 @@
 [build]
   functions = "netlify/functions"
-
-
-# APENAS UM REDIRECT - O RESTANTE VIA FUNCTIONS
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/generate-token"
-  status = 200
-  force = true
-  conditions = {Language = ["en"]}
-
-# Headers essenciais
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Headers = "*"
-    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
