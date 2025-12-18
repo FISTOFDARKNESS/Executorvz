@@ -1,7 +1,15 @@
 {
-  "name": "zeta-functions",
+  "name": "zeta-script-protector",
   "version": "1.0.0",
+  "description": "Protected script delivery system for Zeta Realm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests needed in Zeta\" && exit 0"
+  },
   "dependencies": {
     "crypto": "^1.0.1"
-  }
+  },
+  "keywords": ["zeta", "roblox", "exploit", "protected"],
+  "author": "Alpha",
+  "license": "ZETA-1.0"
 }
