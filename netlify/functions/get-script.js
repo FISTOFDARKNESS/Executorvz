@@ -4,45 +4,7 @@ const crypto = require('crypto');
 const SECRET_KEY = "zeta-realm-" + Date.now().toString(36);
 // Se você mudou no generate-token, COPIE A MESMA STRING AQUI!
 
-const SCRIPT_CONTENT = `print("=== ZETA REALM ===")
-print("🔥 Script carregado com sucesso!")
-print("Hora: " .. os.date())
-
--- Seu exploit aqui
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
-if LocalPlayer then
-    -- Notificação
-    local Notification = game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "Zeta Realm",
-        Text = "Executando payload protegido...",
-        Duration = 3
-    })
-    
-    print("Jogador: " .. LocalPlayer.Name)
-    print("Game ID: " .. game.PlaceId)
-    
-    -- Exemplo de função
-    function teleportToSpawn()
-        local character = LocalPlayer.Character
-        if character then
-            local spawn = workspace:FindFirstChild("SpawnLocation") 
-            or workspace:FindFirstChild("Part")
-            if spawn then
-                character:MoveTo(spawn.Position)
-                print("Teleportado para spawn")
-            end
-        end
-    end
-    
-    -- Adicione seus comandos aqui
-    print("Sistema Zeta pronto para comandos!")
-else
-    print("Aguardando jogador...")
-end
-
-return "Zeta Script Executed 🔥"`;
+const SCRIPT_CONTENT = `print("hi")`;
 
 exports.handler = async (event) => {
     const headers = {
