@@ -1,6 +1,5 @@
 const crypto = require('crypto');
-
-const SECRET_KEY = "zeta-realm-" + Date.now().toString(36);
+const SECRET_KEY = "zeta-realm-master-secret-key-2024";
 const SCRIPT_CONTENT = `print("hi")`;
 
 exports.handler = async (event) => {
