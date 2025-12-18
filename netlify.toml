@@ -9,11 +9,6 @@
   status = 200
 
 [[redirects]]
-  from = "/token"
-  to = "/.netlify/functions/generate-token"
-  status = 200
-
-[[redirects]]
   from = "/script"
   to = "/.netlify/functions/get-script"
   status = 200
@@ -22,13 +17,6 @@
   from = "/f/*"
   to = "/.netlify/functions/get-script?file=:splat"
   status = 200
-
-# Bloqueia acesso direto a functions
-[[redirects]]
-  from = "/.netlify/functions/*"
-  to = "/"
-  status = 403
-  conditions = {Role = ["bot", "crawler"]}
 
 # Security headers
 [[headers]]
