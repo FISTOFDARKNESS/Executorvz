@@ -1,11 +1,30 @@
 const crypto = require("crypto");
-const SECRET = "FUCKYOUNIGGA";
+
+const SECRET = "excaliburhub-secret";
 
 const FILES = {
   "5f38a9b95530af2a5429fc6e693a328a8765534ce": `
 print("Script carregado com token válido")
   `
 };
+
+function validToken(token) {
+  try {
+    const [ts, sig] = token.split(".");
+    if (!ts || !sig) return false;
+
+    if (Date.now() - Number(ts) > 15000) return false;
+
+    const expected = crypto
+      .createHmac("sha256", SECRET)
+      .update(ts)
+      .digest("hex");
+
+    return expected === sig;
+  } catch {
+    return false;
+  }
+}
 
 exports.handler = async (event) => {
   const hash = event.path.split("/").pop();
@@ -16,25 +35,8 @@ exports.handler = async (event) => {
     return { statusCode: 404 };
   }
 
-  if (!token || !token.includes(".")) {
-    return { statusCode: 403 };
-  }
-
-  const [dataB64, sig] = token.split(".");
-  const data = Buffer.from(dataB64, "base64").toString();
-
-  const expectedSig = crypto
-    .createHmac("sha256", SECRET)
-    .update(data)
-    .digest("hex");
-
-  if (sig !== expectedSig) {
-    return { statusCode: 403 };
-  }
-
-  const payload = JSON.parse(data);
-  if (Date.now() > payload.exp) {
-    return { statusCode: 403 };
+  if (!token || !validToken(token)) {
+    return { statusCode: 403, body: "Invalid token" };
   }
 
   if (!FILES[hash]) {
