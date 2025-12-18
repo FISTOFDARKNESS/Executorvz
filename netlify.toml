@@ -1,6 +1,6 @@
 [build]
-  publish = "."
-  functions = "functions"
+  functions = "netlify/functions"
+
 
 # APENAS UM REDIRECT - O RESTANTE VIA FUNCTIONS
 [[redirects]]
