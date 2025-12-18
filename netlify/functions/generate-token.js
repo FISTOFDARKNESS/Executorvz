@@ -1,4 +1,3 @@
-// /netlify/functions/generate-token.js - ATUALIZADO
 const crypto = require("crypto");
 
 const SECRET = "excaliburhub-secret";
@@ -18,7 +17,6 @@ exports.handler = async (event) => {
   const sig = crypto.createHmac("sha256", SECRET).update(ts).digest("hex");
   const token = `${ts}.${sig}`;
   
-  // AGORA com mais dados de debug
   return {
     statusCode: 200,
     headers,
