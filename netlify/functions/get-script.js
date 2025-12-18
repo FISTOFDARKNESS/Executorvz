@@ -51,7 +51,7 @@ exports.handler = async (event) => {
         console.log("Token timestamp:", timestamp, "Now:", now);
         
         // 30 segundos de validade (mesmo do generate-token)
-        if (Math.abs(now - tokenTime) > 30000) {
+        if (Math.abs(now - tokenTime) > 2000) {
             console.log("ERRO: Token expirado. Diferença:", Math.abs(now - tokenTime));
             return { 
                 statusCode: 403, 
