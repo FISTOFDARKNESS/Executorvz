@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 
 const FILES = {
-  "5f38a9b95530af2a5429fc6e693a328a8765534ce": `
+  "5c2a4688-69c7-49b3-9432-076b7a9fd5a6": `
 print("Script A carregado")
   `,
 
