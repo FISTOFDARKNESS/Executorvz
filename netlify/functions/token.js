@@ -1,12 +1,19 @@
 const crypto = require("crypto");
 
-const TOKENS = new Map();
+const SECRET = "FUCKYOUNIGGA";
 
 exports.handler = async () => {
-  const token = crypto.randomBytes(16).toString("hex");
-  const expire = Date.now() + 15_000;
+  const payload = {
+    exp: Date.now() + 10_000 // 10s
+  };
 
-  TOKENS.set(token, expire);
+  const data = JSON.stringify(payload);
+  const sig = crypto
+    .createHmac("sha256", SECRET)
+    .update(data)
+    .digest("hex");
+
+  const token = Buffer.from(data).toString("base64") + "." + sig;
 
   return {
     statusCode: 200,
@@ -17,12 +24,3 @@ exports.handler = async () => {
     body: token
   };
 };
-
-setInterval(() => {
-  const now = Date.now();
-  for (const [t, exp] of TOKENS) {
-    if (exp < now) TOKENS.delete(t);
-  }
-}, 10_000);
-
-module.exports.TOKENS = TOKENS;
