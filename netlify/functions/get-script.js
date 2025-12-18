@@ -1,10 +1,7 @@
 const crypto = require('crypto');
-
-// ⚠️ IMPORTANTE: MESMA SECRET KEY do generate-token.js ⚠️
 const SECRET_KEY = "zeta-realm-master-secret-key-2024";
-// Se você mudou no generate-token, COPIE A MESMA STRING AQUI!
 
-const SCRIPT_CONTENT = `print("hi")`;
+const SCRIPT_CONTENT = `https://pastefy.app/RBcneQxu/raw`;
 
 exports.handler = async (event) => {
     const headers = {
