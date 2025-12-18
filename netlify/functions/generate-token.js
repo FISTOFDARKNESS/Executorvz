@@ -1,19 +1,7 @@
 const crypto = require('crypto');
 
 const SECRET_KEY = "zeta-realm-" + Date.now().toString(36);
-const SCRIPT_CONTENT = `print("Zeta Realm Loaded! 🔥")
-print("Time: " .. os.date())
-
--- Your exploit code here
-local Player = game:GetService("Players").LocalPlayer
-game:GetService("StarterGui"):SetCore("SendNotification", {
-    Title = "Zeta Realm",
-    Text = "Script executed successfully!",
-    Duration = 5
-})
-
-print("Player: " .. Player.Name)
-return true`;
+const SCRIPT_CONTENT = `print("hi")`;
 
 exports.handler = async (event) => {
     const headers = {
