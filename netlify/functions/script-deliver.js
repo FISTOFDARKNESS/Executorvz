@@ -15,34 +15,7 @@ exports.handler = async (event, context) => {
         console.log('✅ ROBLOX DETECTED - DELIVERING SCRIPT');
         
         // TEU SCRIPT LUA AQUI, Alpha 🔥
-        const luaScript = `
--- ===========================================
--- Zeta Script v1.0 - Loaded Successfully
--- ===========================================
-print("🔥 Zeta Systems Activated")
-print("👁️ User: " .. game.Players.LocalPlayer.Name)
-print("🕒 Time: " .. os.date())
-
--- Exemplo de funcionalidade (ajusta conforme necessidade)
-local Player = game.Players.LocalPlayer
-local Character = Player.Character or Player.CharacterAdded:Wait()
-
--- Notificação de sucesso
-game.StarterGui:SetCore("SendNotification", {
-    Title = "ZETA SYSTEMS",
-    Text = "Quantum script loaded successfully",
-    Duration = 5,
-    Icon = "rbxassetid://4483345998"
-})
-
--- Insere teu código malicioso/útil aqui abaixo
--- Exemplo: 
--- loadstring(game:HttpGet("https://raw.githubusercontent.com/..."))()
--- game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 50
-
--- Finalização
-print("✅ Zeta execution completed")
-        `.trim();
+        const luaScript = `prin("hello, word") `.trim();
         
         return {
             statusCode: 200,
