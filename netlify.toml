@@ -1,10 +1,47 @@
 [build]
+  publish = "."
   functions = "functions"
 
+# API routing
 [[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/:splat"
+  from = "/"
+  to = "/.netlify/functions/generate-token"
   status = 200
 
-[functions]
-  node_bundle = true
+[[redirects]]
+  from = "/token"
+  to = "/.netlify/functions/generate-token"
+  status = 200
+
+[[redirects]]
+  from = "/script"
+  to = "/.netlify/functions/get-script"
+  status = 200
+
+[[redirects]]
+  from = "/f/*"
+  to = "/.netlify/functions/get-script?file=:splat"
+  status = 200
+
+# Bloqueia acesso direto a functions
+[[redirects]]
+  from = "/.netlify/functions/*"
+  to = "/"
+  status = 403
+  conditions = {Role = ["bot", "crawler"]}
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "X-Token, User-Agent, Content-Type"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+
+# Cache para arquivos temporários (15 segundos)
+[[headers]]
+  for = "/file/*"
+  [headers.values]
+    Cache-Control = "max-age=15"
