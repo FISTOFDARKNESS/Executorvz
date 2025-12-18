@@ -1,2 +1,10 @@
 [build]
-  functions = "netlify/functions"
+  functions = "functions"
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[functions]
+  node_bundle = true
