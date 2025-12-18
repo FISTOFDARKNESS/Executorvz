@@ -1,40 +1,79 @@
-const crypto = require("crypto");
+const crypto = require('crypto');
 
-const SECRET = "excaliburhub-secret";
+// CONFIGURAÇÃO ZETA 🔥
+const SECRET_KEY = "zeta-realm-secret-key-" + Date.now().toString(36);
+const SCRIPT_CONTENT = `print("hi")`;
 
 exports.handler = async (event) => {
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "*",
-    "Content-Type": "application/json"
-  };
+    // Headers CORS
+    const headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "X-Token, User-Agent, Content-Type",
+        "Content-Type": "application/json",
+        "X-Zeta-Realm": "Protected-Script-System"
+    };
 
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200, headers, body: "" };
-  }
+    // Handle CORS preflight
+    if (event.httpMethod === "OPTIONS") {
+        return { statusCode: 200, headers, body: "" };
+    }
 
-  const ts = Date.now().toString();
-  const sig = crypto.createHmac("sha256", SECRET).update(ts).digest("hex");
-  const token = `${ts}.${sig}`;
-  
-  const directScriptUrl = `https://api-excaliburhub.netlify.app/.netlify/functions/get-script?token=${token}`;
-  
-  return {
-    statusCode: 200,
-    headers,
-    body: JSON.stringify({
-      success: true,
-      token: token,
-      timestamp: ts,
-      signature: sig,
-      debug: {
-        server_time: new Date().toISOString(),
-        token_valid_for_ms: 15000,
-        recommended_ua: "temp",
-        note: "If 404, try different User-Agent or empty UA"
-      },
-      loadstring_url: directScriptUrl,
-      loadstring_example: `loadstring(game:HttpGet("${directScriptUrl}"))()`
-    })
-  };
+    try {
+        // Gera timestamp e token
+        const timestamp = Date.now().toString();
+        const signature = crypto
+            .createHmac("sha256", SECRET_KEY)
+            .update(timestamp + (event.headers['user-agent'] || 'ZoClient'))
+            .digest("hex");
+        
+        const token = `${timestamp}.${signature}`;
+        
+        // Gera URL do script com token
+        const scriptUrl = `https://${event.headers.host || 'zeta-realm.netlify.app'}/.netlify/functions/get-script?token=${token}`;
+        
+        // Response baseada no formato solicitado
+        const format = event.queryStringParameters?.format || 'json';
+        
+        if (format === 'loadstring') {
+            // Retorna direto o loadstring
+            return {
+                statusCode: 200,
+                headers: { ...headers, "Content-Type": "text/plain" },
+                body: `loadstring(game:HttpGet("${scriptUrl}", {["X-Token"] = "${token}", ["User-Agent"] = "ZoClient/1.0"}))()`
+            };
+        }
+        
+        // Response padrão JSON
+        const response = {
+            success: true,
+            token: token,
+            url: scriptUrl,
+            headers: {
+                "X-Token": token,
+                "User-Agent": "ZoClient/1.0"
+            },
+            expires_in: 15000, // 15 segundos
+            timestamp: timestamp,
+            server_time: new Date().toISOString(),
+            note: "Token válido por 15 segundos. Use headers X-Token e User-Agent.",
+            loadstring_example: `loadstring(game:HttpGet("${scriptUrl}", {["X-Token"] = "${token}", ["User-Agent"] = "ZoClient/1.0"}))()`
+        };
+
+        return {
+            statusCode: 200,
+            headers,
+            body: JSON.stringify(response, null, 2)
+        };
+
+    } catch (error) {
+        return {
+            statusCode: 500,
+            headers,
+            body: JSON.stringify({
+                success: false,
+                error: error.message,
+                note: "Internal server error - Zeta Realm"
+            })
+        };
+    }
 };
